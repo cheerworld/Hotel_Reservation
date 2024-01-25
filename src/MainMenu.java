@@ -13,50 +13,55 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    private static String[] options;
+    private static final String[] options = new String[] {
+        "1. Find and reserve a room",
+        "2. See my reservations",
+        "3. Create an account",
+        "4. Admin",
+        "5. Exit"
+    };
     private static HotelResource hotelResource;
     private static final String DATE_FORMAT = "MM/dd/yyyy";
 
     public static void mainMenu() {
-        options = new String[] {
-                "1. Find and reserve a room",
-                "2. See my reservations",
-                "3. Create an account",
-                "4. Admin",
-                "5. Exit"
-        };
 
         hotelResource = HotelResource.getInstance();
 
         Scanner scanner = new Scanner(System.in);
         int option = 1;
-        while(option != 5) {
-            printMenu(options);
 
-            try {
-                option=scanner.nextInt();
-                System.out.println(option);
+        printMenu();
 
-                switch(option) {
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
+        try {
+            option=scanner.nextInt();
+            System.out.println(option);
 
-                }
+            switch(option) {
+                case 1:
+                    findAndReserveRoom();
+                    break;
+                case 2:
+                    seeMyReservations();
+                    break;
+                case 3:
+                    createAnAccount();
+                    break;
+                case 4:
 
-            } catch (InputMismatchException ex) {
-                System.out.println("Please enter an integer value between 1 and " + options.length);
-                scanner.next();
-            } catch (Exception ex) {
-                System.out.println("An unexpected error happened. Please try again");
-                scanner.next();
+                    break;
+                case 5:
+                    System.out.println("Exit");
+                default:
+                    System.out.println("Error: Invalid input");
+
             }
 
+        } catch (InputMismatchException ex) {
+                System.out.println("Please enter an integer value between 1 and " + options.length);
+                scanner.next();
+        } catch (Exception ex) {
+                System.out.println("An unexpected error happened. Please try again");
+                scanner.next();
         }
     }
 
@@ -114,7 +119,7 @@ public class MainMenu {
                     boolean found = false;
                     for(IRoom room: rooms) {
                         if(room.getRoomNumber().equals(roomNumber)) {
-                            //TODO: make a reservation and print reservation
+                            //make a reservation and print reservation
                             IRoom findRoom = hotelResource.getRoom(roomNumber);
                             Reservation bookReservation = hotelResource.bookARoom(email, findRoom, checkInDate, checkOutDate);
 
@@ -126,21 +131,21 @@ public class MainMenu {
                     }
                     if(!found) {
                         System.out.println("Error: can't find available rooms for this room number");
-                        printMenu(options);
+                        printMenu();
                     }
                 } else {
                     System.out.println("Error: can't find customer that associate with the provided email");
-                    printMenu(options);
+                    printMenu();
                 }
             } else if(haveAccount.equalsIgnoreCase("n")) {
                 System.out.println("Please create an account.");
-                printMenu(options);
+                printMenu();
             } else {
                 System.out.println("Error: Invalid Input");
                 reserveRoom(scanner, rooms, checkInDate, checkOutDate);
             }
         } else if(bookRoom.equalsIgnoreCase("n")) {
-            printMenu(options);
+            printMenu();
         } else {
             System.out.println("Error: Invalid Input");
             reserveRoom(scanner, rooms, checkInDate, checkOutDate);
@@ -158,8 +163,19 @@ public class MainMenu {
     }
 
     private static void seeMyReservations() {
-        
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter the email that you registered with us to view all your reservations");
+        String email = scanner.nextLine().trim();
+        Collection<Reservation> reservations = hotelResource.getCustomersReservations(email);
+
+        if(reservations == null || reservations.isEmpty()) {
+            System.out.println("No reservations found for this account.");
+            printMenu();
+        } else {
+            reservations.forEach(reservation -> System.out.println("\n" + reservation));
+        }
     }
+
     private static void createAnAccount() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter Email Format: name@domain.com");
@@ -174,14 +190,14 @@ public class MainMenu {
         try {
             hotelResource.createACustomer(email, firstName, lastName);
             System.out.println("Account created successfully!");
-            printMenu(options);
+            printMenu();
         } catch(Exception ex) {
             System.out.println(ex.getLocalizedMessage());
             createAnAccount();
         }
     }
 
-    public static void printMenu(String[] options) {
+    public static void printMenu() {
         System.out.println("Welcome to the Hotel Reservation Application");
         for(String option: options) {
             System.out.println(option);
