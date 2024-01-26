@@ -129,7 +129,6 @@ public class AdminMenu {
         try {
             return Double.parseDouble(scanner.nextLine().trim());
         } catch (NumberFormatException ex) {
-            //System.out.println(ex.getLocalizedMessage());
             System.out.println("Error: invalid room price. please enter a valid double number.");
             return convertRoomPrice(scanner);
         }

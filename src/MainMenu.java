@@ -99,46 +99,62 @@ public class MainMenu {
         System.out.println("Would you like to book a room? y/n");
         String bookRoom = scanner.nextLine().trim();
 
-        if(bookRoom.equalsIgnoreCase("y")) {
-            System.out.println("Do you have an account with us? y/n");
-            String haveAccount = scanner.nextLine().trim();
-            if(haveAccount.equalsIgnoreCase("y")) {
-                System.out.println("Enter Email Format: name@domain.com");
-                String email = scanner.nextLine().trim();
-                Customer customer = hotelResource.getCustomer(email);
-                if(customer != null) {
-                    System.out.println("What room number would you like to reserve?");
-                    String roomNumber = scanner.nextLine().trim();
-                    boolean found = false;
-                    for(IRoom room: rooms) {
-                        if(room.getRoomNumber().equals(roomNumber)) {
-                            //make a reservation and print reservation
-                            IRoom findRoom = hotelResource.getRoom(roomNumber);
-                            Reservation bookReservation = hotelResource.bookARoom(email, findRoom, checkInDate, checkOutDate);
+        switch (bookRoom.toLowerCase()) {
+            case "y":
+                System.out.println("Do you have an account with us? y/n");
+                String haveAccount = scanner.nextLine().trim();
 
-                            System.out.println("Reservation: ");
-                            System.out.println(bookReservation);
-                            found = true;
-                            break;
+                switch (haveAccount.toLowerCase()) {
+                    case "y":
+                        System.out.println("Enter Email Format: name@domain.com");
+                        String email = scanner.nextLine().trim();
+                        Customer customer = hotelResource.getCustomer(email);
+
+                        if (customer == null) {
+                            System.out.println("Error: Can't find customer associated with the provided email");
+                            return;
                         }
-                    }
-                    if(!found) {
-                        System.out.println("Error: can't find available rooms for this room number");
-                    }
-                } else {
-                    System.out.println("Error: can't find customer that associate with the provided email");
+
+                        System.out.println("What room number would you like to reserve?");
+                        String roomNumber = scanner.nextLine().trim();
+                        IRoom findRoom = null;
+
+                        for (IRoom room : rooms) {
+                            if (room.getRoomNumber().equals(roomNumber)) {
+                                findRoom = room;
+                                break;
+                            }
+                        }
+
+                        if (findRoom == null) {
+                            System.out.println("Error: Can't find available rooms for this room number");
+                            return;
+                        }
+
+                        Reservation bookReservation = hotelResource.bookARoom(email, findRoom, checkInDate, checkOutDate);
+                        System.out.println("Reservation: ");
+                        System.out.println(bookReservation);
+                        break;
+
+                    case "n":
+                        System.out.println("Please create an account.");
+                        break;
+
+                    default:
+                        System.out.println("Error: Invalid Input");
+                        reserveRoom(scanner, rooms, checkInDate, checkOutDate);
+                        break;
                 }
-            } else if(haveAccount.equalsIgnoreCase("n")) {
-                System.out.println("Please create an account.");
-            } else {
+                break;
+
+            case "n":
+                System.out.println("Back to Main Menu");
+                break;
+
+            default:
                 System.out.println("Error: Invalid Input");
                 reserveRoom(scanner, rooms, checkInDate, checkOutDate);
-            }
-        } else if(bookRoom.equalsIgnoreCase("n")) {
-            System.out.println("Back to Main Menu");
-        } else {
-            System.out.println("Error: Invalid Input");
-            reserveRoom(scanner, rooms, checkInDate, checkOutDate);
+                break;
         }
     }
 
