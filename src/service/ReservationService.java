@@ -18,15 +18,15 @@ public class ReservationService {
         this.reservations = new HashSet<Reservation>();
     }
 
-    public Set<Reservation> getReservations() {
+    public final Set<Reservation> getReservations() {
         return reservations;
     }
 
-    public Set<IRoom> getAvailableRooms() {
+    public final Set<IRoom> getAvailableRooms() {
         return availableRooms;
     }
 
-    public void addRoom(IRoom room) {
+    public final void addRoom(IRoom room) {
         for (IRoom r : availableRooms) {
             if (r.equals(room)) {
                 throw new IllegalArgumentException("This room number already exists, please add a room with a different room number.");
@@ -35,7 +35,7 @@ public class ReservationService {
         availableRooms.add(room);
     }
 
-    public IRoom getARoom(String roomId) {
+    public final IRoom getARoom(String roomId) {
         for(IRoom room: getAvailableRooms()) {
             if(room.getRoomNumber().equals(roomId)) {
                 return room;
@@ -44,13 +44,13 @@ public class ReservationService {
         return null;
     }
 
-    public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
+    public final Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
         Reservation newReservation = new Reservation(customer, room, checkInDate, checkOutDate);
         reservations.add(newReservation);
         return newReservation;
     }
 
-    public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
+    public final Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
         Set<IRoom> freeRooms = new HashSet<IRoom>();
         Set<IRoom> reservedRooms = getReservedRooms(
                 checkInDate, checkOutDate);
@@ -64,11 +64,11 @@ public class ReservationService {
         return freeRooms;
     }
 
-    public Collection<IRoom> findAlternativeRooms(Date checkInDate, Date checkOutDate) {
+    public final Collection<IRoom> findAlternativeRooms(Date checkInDate, Date checkOutDate) {
         return findRooms(add7days(checkInDate), add7days(checkOutDate));
     }
 
-    public Date add7days(Date date) {
+    public final Date add7days(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_YEAR, 7);
@@ -77,7 +77,7 @@ public class ReservationService {
         return newDate;
     }
 
-    public Set<IRoom> getReservedRooms(Date checkInDate, Date checkOutDate) {
+    public final Set<IRoom> getReservedRooms(Date checkInDate, Date checkOutDate) {
         Set<IRoom> reservedRooms = new HashSet<IRoom>();
         for(Reservation r: getReservations()) {
             IRoom room = r.getRoom();
@@ -89,7 +89,7 @@ public class ReservationService {
         return reservedRooms;
     }
 
-    public Collection<Reservation> getCustomersReservation(Customer customer) {
+    public final Collection<Reservation> getCustomersReservation(Customer customer) {
         Set<Reservation> customerReservation = new HashSet<Reservation>();
         for(Reservation r: getReservations()) {
             if(r.getCustomer().equals(customer)) {
@@ -100,7 +100,7 @@ public class ReservationService {
         return customerReservation;
     }
 
-    public void printAllReservation() {
+    public final void printAllReservation() {
         for(Reservation r: getReservations()) {
             System.out.println(r);
         }

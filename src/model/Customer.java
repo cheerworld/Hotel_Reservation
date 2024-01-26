@@ -4,13 +4,13 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class Customer {
-    private String firstName;
-    private String lastName;
-    private String email;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
 
     public Customer(String firstName, String lastName, String email) {
-        String emailRegex = "^(.+)@(.+).(.+)$";
-        Pattern pattern = Pattern.compile(emailRegex);
+        final String emailRegex = "^(.+)@(.+).(.+)$";
+        final Pattern pattern = Pattern.compile(emailRegex);
 
         if(pattern.matcher(email).matches()) {
             this.email = email;
@@ -21,15 +21,15 @@ public class Customer {
         }
     }
 
-    public String getFirstName() {
+    public final String getFirstName() {
         return firstName;
     }
 
-    public String getLastName() {
+    public final String getLastName() {
         return lastName;
     }
 
-    public String getEmail() {
+    public final String getEmail() {
         return email;
     }
 

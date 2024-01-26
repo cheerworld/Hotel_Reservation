@@ -10,7 +10,7 @@ import java.util.*;
 public class AdminMenu {
 
     private static AdminResource adminResource;
-    private static String[] options = new String[] {
+    private static final String[] options = new String[] {
         "1. See all customers",
         "2. See all rooms",
         "3. See all reservations",
@@ -18,7 +18,6 @@ public class AdminMenu {
         "5. Back to main menu"
     };
 
-    private static Set<IRoom> newRooms = new HashSet<IRoom>();
     public static void adminMenu() {
 
         adminResource = AdminResource.getInstance();
@@ -26,38 +25,38 @@ public class AdminMenu {
         Scanner scanner = new Scanner(System.in);
         int option = 1;
 
-        printAdminMenu();
+        while(option != 5) {
+            printAdminMenu();
 
-        try {
-            option=scanner.nextInt();
-            System.out.println(option);
+            try {
+                option = scanner.nextInt();
 
-            switch(option) {
-                case 1:
-                    seeAllCustomers();
-                    break;
-                case 2:
-                    seeAllRooms();
-                    break;
-                case 3:
-                    seeAllReservations();
-                    break;
-                case 4:
-                    addARoom();
-                    break;
-                case 5:
-                    MainMenu.printMenu();
-                default:
-                    System.out.println("Error: Invalid input");
+                switch (option) {
+                    case 1:
+                        seeAllCustomers();
+                        break;
+                    case 2:
+                        seeAllRooms();
+                        break;
+                    case 3:
+                        seeAllReservations();
+                        break;
+                    case 4:
+                        addARoom();
+                        break;
+                    case 5:
+                        MainMenu.mainMenu();
+                    default:
+                        System.out.println("Error: Invalid input");
+                }
 
+            } catch (InputMismatchException ex) {
+                System.out.println("Please enter an integer value between 1 and " + options.length);
+                scanner.next();
+            } catch (Exception ex) {
+                System.out.println("An unexpected error happened. Please try again");
+                scanner.next();
             }
-
-        } catch (InputMismatchException ex) {
-            System.out.println("Please enter an integer value between 1 and " + options.length);
-            scanner.next();
-        } catch (Exception ex) {
-            System.out.println("An unexpected error happened. Please try again");
-            scanner.next();
         }
     }
 
@@ -65,8 +64,10 @@ public class AdminMenu {
         Collection<Customer> customers = adminResource.getAllCustomers();
         if(customers == null || customers.isEmpty()) {
             System.out.println("No customers founds");
+            //printAdminMenu();
         } else {
             customers.forEach(System.out::println);
+            //printAdminMenu();
         }
     }
 
@@ -96,7 +97,12 @@ public class AdminMenu {
 
         IRoom room = new Room(roomNumber, roomPrice, roomType);
 
-        adminResource.addRoom(Collections.singletonList(room));
+        try {
+            adminResource.addRoom(Collections.singletonList(room));
+        } catch (Exception ex) {
+            System.out.println(ex.getLocalizedMessage());
+        }
+
         System.out.println("Would you like to add another room? y/n");
         addAnotherRoom();
     }
@@ -109,7 +115,7 @@ public class AdminMenu {
             if(addRoom.equalsIgnoreCase("y")) {
                 addARoom();
             } else if(addRoom.equalsIgnoreCase("n")) {
-                printAdminMenu();
+                System.out.println("Back th Admin Menu");
             } else {
                 throw new IllegalArgumentException("Please enter Y (Yes) or N (No)");
             }
@@ -123,7 +129,7 @@ public class AdminMenu {
         try {
             return Double.parseDouble(scanner.nextLine().trim());
         } catch (NumberFormatException ex) {
-            System.out.println(ex.getLocalizedMessage());
+            //System.out.println(ex.getLocalizedMessage());
             System.out.println("Error: invalid room price. please enter a valid double number.");
             return convertRoomPrice(scanner);
         }

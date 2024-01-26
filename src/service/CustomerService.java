@@ -7,13 +7,13 @@ import java.util.*;
 
 public class CustomerService {
 
-    private static CustomerService reference = new CustomerService();
+    private static final CustomerService reference = new CustomerService();
     private final Set<Customer> customers;
     private CustomerService() {
         this.customers = new HashSet<Customer>();
     }
 
-    public void addCustomer(String email, String firstName, String lastName) {
+    public final void addCustomer(String email, String firstName, String lastName) {
         for (Customer customer : customers) {
             if (customer.getEmail().equals(email)) {
                 throw new IllegalArgumentException("The email address you entered already exists in the customer list, please enter a different email address.");
@@ -23,7 +23,7 @@ public class CustomerService {
     }
 
 
-    public Customer getCustomer(String customerEmail) {
+    public final Customer getCustomer(String customerEmail) {
         for (Customer customer: customers) {
             if (customer.getEmail().equals(customerEmail)) {
                 return customer;
@@ -31,7 +31,7 @@ public class CustomerService {
         }
         return null;
     }
-    public Collection<Customer> getAllCustomers() {
+    public final Collection<Customer> getAllCustomers() {
         return customers;
     }
     public static CustomerService getInstance() {
