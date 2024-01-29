@@ -5,4 +5,3 @@ public class HotelApplication {
 }
 
 //Referenced SOURCE URL code: https://github.com/zeevolution/hotel-reservation
-//test out email config changes
