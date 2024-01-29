@@ -10,7 +10,7 @@ import java.util.*;
 public class AdminMenu {
 
     private static AdminResource adminResource;
-    private static final String[] options = new String[] {
+    public static final String[] options = new String[] {
         "1. See all customers",
         "2. See all rooms",
         "3. See all reservations",
@@ -64,10 +64,8 @@ public class AdminMenu {
         Collection<Customer> customers = adminResource.getAllCustomers();
         if(customers == null || customers.isEmpty()) {
             System.out.println("No customers founds");
-            //printAdminMenu();
         } else {
             customers.forEach(System.out::println);
-            //printAdminMenu();
         }
     }
 
@@ -84,10 +82,19 @@ public class AdminMenu {
         adminResource.displayAllReservations();
     }
 
+    private static Integer convertRoomNumber(Scanner scanner) {
+        try {
+            return Integer.parseInt(scanner.nextLine().trim());
+        } catch (Exception ex) {
+            System.out.println("Error: Invalid Input! Please enter a number for room number:");
+            return convertRoomNumber(scanner);
+        }
+    }
+
     public static void addARoom() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter room number:");
-        String roomNumber = scanner.nextLine().trim();
+        String roomNumber = Integer.toString(convertRoomNumber(scanner));
 
         System.out.println("Enter price per night:");
         double roomPrice = convertRoomPrice(scanner);

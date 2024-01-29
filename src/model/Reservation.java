@@ -3,10 +3,10 @@ package model;
 import java.util.Date;
 
 public class Reservation {
-    private final Customer customer;
-    private final IRoom room;
-    private final Date checkInDate;
-    private final Date checkOutDate;
+    private Customer customer;
+    private IRoom room;
+    private Date checkInDate;
+    private Date checkOutDate;
 
     public Reservation(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
         this.customer = customer;
@@ -19,16 +19,32 @@ public class Reservation {
         return customer;
     }
 
+    public final void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
     public final IRoom getRoom() {
         return room;
+    }
+
+    public final void setRoom(IRoom room) {
+        this.room = room;
     }
 
     public final Date getCheckInDate() {
         return checkInDate;
     }
 
+    public final void setCheckInDate(Date checkIn) {
+        this.checkInDate = checkIn;
+    }
+
     public final Date getCheckOutDate() {
         return checkOutDate;
+    }
+
+    public final void setCheckOutDate(Date checkOut) {
+        this.checkOutDate = checkOut;
     }
 
     @Override

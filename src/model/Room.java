@@ -3,9 +3,9 @@ package model;
 import java.util.Objects;
 
 public class Room implements IRoom {
-    private final String roomNumber;
-    private final Double price;
-    private final RoomType roomType;
+    private String roomNumber;
+    private Double price;
+    private RoomType roomType;
 
     public Room(String roomNumber, Double price, RoomType roomType) {
         super();
@@ -18,14 +18,25 @@ public class Room implements IRoom {
         return roomNumber;
     }
 
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
     @Override
     public Double getRoomPrice() {
         return price;
     }
 
+    public void setRoomPrice(Double price) {
+        this.price = price;
+    }
     @Override
     public RoomType getRoomType() {
         return roomType;
+    }
+
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
     }
 
     @Override

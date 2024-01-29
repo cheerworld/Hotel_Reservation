@@ -10,7 +10,7 @@ import java.util.*;
 
 public class MainMenu {
 
-    private static final String[] options = new String[] {
+    public static final String[] options = new String[] {
         "1. Find and reserve a room",
         "2. See my reservations",
         "3. Create an account",
